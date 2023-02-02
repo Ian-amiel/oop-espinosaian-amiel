@@ -1,31 +1,39 @@
 <?php
-    class Product{
-        private $name;
-        private $description;
-        private $price;
-        private $srp;
+    require_once "Medicine.php";
+    require_once "products.php";
+
+
+    class Cart extends Medicine{
+        private $cartItems = array();
     
-        function setName($name){
-            $this->name = $name;
+        function addToCart($item){
+            $this->cartItems[] = $item;
         }
-        function setDescription($description){
-            $this->description = $description;
+        function viewCart(){
+            $arrCartItems = $this->cartItems;
+            foreach ($arrCartItems as $key => $Value){
+                echo 
+                '<ul>
+                    <li>Name: ' . $Value->getName() . '</li>
+                    <li>Description: ' . $Value->getDescription() . '</li>
+                    <li>Price: ₱ ' . number_format($Value->getPrice(), 2 ). '</li>
+                    <li>Dose: ' . $Value->getDose() . '</li>
+                    <li>Type: ' . $Value->getType() . '</li>
+                    <li>Exp Date: ' . $Value->getExpirationDate() . '</li>
+                    <li>SRP: ' . $Value->computeSRP() . '</li>
+                </ul>
+                <hr>';
+            }
+
         }
-        function setPrice($price){
-            $this->price = $price;
+        function computeTotal(){
+            $totalPrice = 0;
+            foreach($this->cartItems as $key => $Value){
+                $totalPrice += $Value->computeSRP();
+            }
+            echo '<b>Total Cart Amount: </b> ₱ ' . number_format($totalPrice,2);
         }
-        
-        function getName(){
-            return $this->name;
-        }
-        function getDescription(){
-            return $this->description;
-        }
-        function getPrice(){
-            return $this->price;
-        }
-        function computeSRP() {
-            return $this->price * 1.5;
-        }
+    
     }
+
 ?>
